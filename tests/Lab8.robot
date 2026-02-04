@@ -1,23 +1,18 @@
 *** Settings ***
 Library    SeleniumLibrary
 
-*** Variables ***
-${URL}           https://computing.kku.ac.th
-${CHROMEDRIVER}  /usr/bin/chromedriver
-
 *** Keywords ***
 Open Browser To Login Page
-    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    Call Method    ${options}    add_argument    --headless
-    Call Method    ${options}    add_argument    --no-sandbox
-    Call Method    ${options}    add_argument    --disable-dev-shm-usage
-    Call Method    ${options}    add_argument    --disable-gpu
-
-    ${service}=    Evaluate    sys.modules['selenium.webdriver.chrome.service'].Service("${CHROMEDRIVER}")    sys
-    Create Webdriver    Chrome    service=${service}    options=${options}
-    Go To    ${URL}
+    ${chrome_options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
+    Call Method    ${chrome_options}    add_argument    --no-sandbox
+    Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
+    Call Method    ${chrome_options}    add_argument    --headless
+    
+    Create Webdriver    Chrome    options=${chrome_options}
+    Go To    https://computing.kku.ac.th
 
 *** Test Cases ***
-Open KKU Website
+Open Website
     Open Browser To Login Page
+    Sleep    3s
     Close Browser
